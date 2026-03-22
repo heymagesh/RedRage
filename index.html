@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RED RAGE | $RAGE - TOTAL SYSTEM ANNIHILATION</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #ff0033;
+            --primary-glow: #ff0033;
+            --secondary: #7000ff;
+            --bg-dark: #020202;
+            --bg-card: rgba(8, 8, 8, 0.95);
+            --text-main: #ffffff;
+            --text-dim: #888888;
+            --accent: #ff4d4d;
+            --transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: var(--primary); }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.8;
+            background-image: 
+                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 3px, 4px 100%;
+        }
+
+        /* ULTRA CRT OVERLAY */
+        body::after {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: rgba(18, 16, 16, 0.15);
+            opacity: 0;
+            z-index: 9999;
+            pointer-events: none;
+            animation: flicker 0.12s infinite;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.15; }
+            50% { opacity: 0.25; }
+            100% { opacity: 0.18; }
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            z-index: -1;
+            filter: contrast(120%) brightness(80%);
+        }
+
+        .vignette {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle, transparent 10%, rgba(0,0,0,0.98) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        #cursor-dot { width: 10px; height: 10px; background: #fff; position: fixed; border-radius: 50%; pointer-events: none; z-index: 10001; mix-blend-mode: difference; box-shadow: 0 0 15px #fff;}
+        #cursor-outline { width: 50px; height: 50px; border: 2px solid var(--primary); position: fixed; border-radius: 50%; pointer-events: none; z-index: 10000; transition: transform 0.1s linear; box-shadow: 0 0 20px var(--primary); }
+
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 40px 80px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000; transition: var(--transition);
+        }
+        nav.scrolled {
+            padding: 20px 80px;
+            background: rgba(0, 0, 0, 0.98);
+            backdrop-filter: blur(40px);
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .logo {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 2rem;
+            color: var(--primary);
+            text-decoration: none;
+            letter-spacing: -3px;
+            font-weight: 900;
+            text-transform: uppercase;
+            filter: drop-shadow(0 0 10px var(--primary));
+        }
+
+        .nav-links { display: flex; gap: 50px; list-style: none; }
+        .nav-links a {
+            text-decoration: none; color: var(--text-dim);
+            font-size: 0.8rem; font-family: 'Syncopate';
+            transition: var(--transition);
+            letter-spacing: 3px;
+            font-weight: 700;
+        }
+        .nav-links a:hover { color: #fff; text-shadow: 0 0 15px var(--primary); }
+
+        .hero {
+            height: 120vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; position: relative;
+            overflow: hidden;
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(6rem, 20vw, 15rem);
+            line-height: 0.75;
+            margin-bottom: 10px;
+            background: linear-gradient(to bottom, #fff 40%, #222 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            font-weight: 900;
+            letter-spacing: -10px;
+        }
+
+        .hero h1::before, .hero h1::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+        }
+
+        .hero h1::before {
+            left: 5px;
+            text-shadow: -4px 0 #ff0033;
+            animation: glitch-v3 1.5s infinite linear alternate-reverse;
+            opacity: 0.8;
+        }
+
+        @keyframes glitch-v3 {
+            0% { clip-path: inset(40% 0 30% 0); transform: translate(-5px, 2px); }
+            25% { clip-path: inset(10% 0 80% 0); transform: translate(5px, -2px); }
+            50% { clip-path: inset(60% 0 10% 0); transform: translate(-3px, 4px); }
+            75% { clip-path: inset(20% 0 50% 0); transform: translate(3px, -4px); }
+            100% { clip-path: inset(80% 0 10% 0); transform: translate(-5px, 2px); }
+        }
+
+        .rage-meter-container {
+            width: 400px;
+            height: 20px;
+            background: #000;
+            border: 2px solid #222;
+            margin: 40px 0;
+            padding: 3px;
+            box-shadow: 0 0 40px rgba(255,0,0,0.15);
+        }
+        .rage-bar {
+            width: 99%;
+            height: 100%;
+            background: linear-gradient(90deg, #300 0%, #f00 40%, #ff4d4d 70%, #fff 100%);
+            box-shadow: 0 0 35px var(--primary);
+            position: relative;
+            animation: ultra-jitter 0.1s infinite;
+        }
+
+        @keyframes ultra-jitter {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(1px) skewX(1deg); filter: hue-rotate(10deg); }
+            100% { transform: translateX(0); }
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 50px;
+            margin-top: 100px;
+        }
+
+        .glass-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 60px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-20px) scale(1.03);
+            border-color: var(--primary);
+            box-shadow: 0 40px 100px rgba(255, 0, 51, 0.3);
+        }
+
+        .glass-card h3 {
+            font-family: 'Orbitron';
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .roadmap-step {
+            display: flex;
+            gap: 60px;
+            margin-bottom: 80px;
+            padding: 50px;
+            background: rgba(255,255,255,0.01);
+            border: 1px solid #111;
+            transition: var(--transition);
+        }
+        .roadmap-step:hover { 
+            border-color: var(--primary); 
+            background: rgba(255,0,51,0.05);
+            transform: translateX(10px);
+        }
+
+        .step-num {
+            font-family: 'Orbitron';
+            font-size: 6rem;
+            line-height: 1;
+            color: transparent;
+            -webkit-text-stroke: 2px var(--primary);
+            font-weight: 900;
+        }
+
+        .btn-main {
+            padding: 30px 80px;
+            background: var(--primary);
+            color: white;
+            font-family: 'Syncopate';
+            font-weight: 900;
+            text-decoration: none;
+            letter-spacing: 5px;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+            transition: var(--transition);
+            display: inline-block;
+            border: none;
+            box-shadow: 10px 10px 0 #000;
+            font-size: 1.1rem;
+        }
+        .btn-main:hover {
+            transform: scale(1.05);
+            background: #fff;
+            color: #000;
+            box-shadow: 0 0 50px rgba(255,255,255,0.5);
+        }
+
+        .contract-section {
+            background: #000;
+            padding: 150px 10%;
+            text-align: center;
+            border-top: 2px solid #111;
+        }
+
+        .reveal { opacity: 0; transform: translateY(100px); transition: 1.5s var(--transition); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 768px) {
+            nav { padding: 20px; }
+            .hero h1 { font-size: 5rem; letter-spacing: -2px; }
+            .rage-meter-container { width: 90%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="cursor-dot"></div>
+    <div id="cursor-outline"></div>
+    <div class="vignette"></div>
+    <canvas id="bg-canvas"></canvas>
+
+    <nav id="navbar">
+        <a href="#" class="logo">RED RAGE</a>
+        <ul class="nav-links">
+            <li><a href="#about">THE MANIFESTO</a></li>
+            <li><a href="#tokenomics">ECONOMY</a></li>
+            <li><a href="#roadmap">DOMINATION</a></li>
+        </ul>
+        <a href="https://t.me/redrageai/1" class="btn-main" style="padding: 15px 40px; font-size: 0.7rem; box-shadow: none;">UNLEASH</a>
+    </nav>
+
+    <section class="hero">
+        <div class="glitch-wrapper">
+            <h1 data-text="RED RAGE">RED RAGE</h1>
+        </div>
+        <p style="letter-spacing: 15px; color: var(--primary); font-family: 'Syncopate'; font-weight: 900; margin-bottom: 20px; text-transform: uppercase;">ABSOLUTE DECENTRALIZED FURY</p>
+        
+        <p style="max-width: 800px; color: #666; font-size: 0.9rem; font-family: 'Space Grotesk'; letter-spacing: 2px; text-transform: uppercase;">
+            Engineered for the survivors of the rug-pull era. This is not a project; it is a digital uprising against paper hands and corrupt developers. We don't follow trends—we incinerate them.
+        </p>
+
+        <div class="rage-meter-container">
+            <div class="rage-bar"></div>
+        </div>
+        
+        <p style="font-size: 0.8rem; color: #444; font-family: 'Syncopate';">THREAT LEVEL: <span style="color: #ff0033; text-shadow: 0 0 20px red; animation: blink 0.4s infinite;">UNSTRICTED_ANNIHILATION</span></p>
+        
+        <div style="margin-top: 60px;">
+            <a href="https://t.me/redrageai/1" class="btn-main">EXECUTE PURCHASE PROTOCOL</a>
+        </div>
+    </section>
+
+    <section id="about" style="padding: 150px 10%;">
+        <div class="section-header reveal">
+            <h2 style="font-family: 'Orbitron'; font-size: 5rem; margin-bottom: 40px; letter-spacing: -3px; line-height: 1;">01. THE RED <br><span style="color: var(--primary)">MANIFESTO</span></h2>
+            <p style="max-width: 850px; color: var(--text-dim); font-size: 1.4rem; border-left: 5px solid var(--primary); padding-left: 40px; font-weight: 300;">
+                Red Rage was forged in the fires of liquidations and broken promises. While others build "utility" that never ships, we build a community that never sleeps. We are the violent reaction to a stagnant market. Every green candle is a middle finger to the skeptics.
+            </p>
+        </div>
+
+        <div class="grid-container">
+            <div class="glass-card reveal">
+                <i class="fas fa-angry" style="font-size: 4rem; color: var(--primary); margin-bottom: 40px;"></i>
+                <h3>CONCENTRATED FURY</h3>
+                <p style="color: var(--text-dim); font-size: 1.1rem;">
+                    $RAGE is powered by the collective anger of retail investors. We turn frustration into market cap. When the world tells you to be patient, we tell you to be aggressive. No mercy for jeets.
+                </p>
+            </div>
+            <div class="glass-card reveal">
+                <i class="fas fa-biohazard" style="font-size: 4rem; color: var(--primary); margin-bottom: 40px;"></i>
+                <h3>ATOMIC LIQUIDITY</h3>
+                <p style="color: var(--text-dim); font-size: 1.1rem;">
+                    The liquidity isn't just locked; it's atomized. Sent to the burn address, the keys were crushed and tossed into the digital abyss. This is a fortress of trust in a wasteland of scams.
+                </p>
+            </div>
+            <div class="glass-card reveal">
+                <i class="fas fa-radiation" style="font-size: 4rem; color: var(--primary); margin-bottom: 40px;"></i>
+                <h3>VIRAL CONTAGION</h3>
+                <p style="color: var(--text-dim); font-size: 1.1rem;">
+                    Our community spreads like a virus. We don't need marketing agencies; we are the marketing. Every member is a node in a decentralized network of pure, unadulterated hype.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="roadmap" style="padding: 150px 10%; background: #050505;">
+        <h2 style="font-family: 'Orbitron'; font-size: 4rem; margin-bottom: 100px; text-align: center; text-transform: uppercase;">WAR PATH <span style="color: #222;">SYSTEM_LOG</span></h2>
+        
+        <div class="roadmap-step reveal">
+            <div class="step-num">01</div>
+            <div>
+                <h3 style="color: var(--primary); font-family: 'Orbitron'; font-size: 2rem; margin-bottom: 15px;">TOTAL IGNITION</h3>
+                <p style="font-size: 1.2rem; color: #aaa;">
+                    Launch the $RAGE protocol onto the blockchain. Saturate every social channel with high-frequency memes. Establish the core legion of holders. This isn't a launch; it's a declaration of war.
+                </p>
+            </div>
+        </div>
+        
+        <div class="roadmap-step reveal">
+            <div class="step-num">02</div>
+            <div>
+                <h3 style="color: var(--primary); font-family: 'Orbitron'; font-size: 2rem; margin-bottom: 15px;">MARKET ANNIHILATION</h3>
+                <p style="font-size: 1.2rem; color: #aaa;">
+                    Break through the resistance of the mid-caps. Force the exchanges to acknowledge the fury. Watch as the market cap expands exponentially while the shorts are liquidated in a sea of red.
+                </p>
+            </div>
+        </div>
+        
+        <div class="roadmap-step reveal">
+            <div class="step-num">03</div>
+            <div>
+                <h3 style="color: var(--primary); font-family: 'Orbitron'; font-size: 2rem; margin-bottom: 15px;">GLOBAL HEGEMONY</h3>
+                <p style="font-size: 1.2rem; color: #aaa;">
+                    Establish $RAGE as the primary currency of the meme world. Complete dominance over all digital assets. The red Ferrari is no longer a dream—it's the mandatory uniform for the elite.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="contract-section">
+        <h2 style="font-family: 'Syncopate'; font-size: 1.5rem; margin-bottom: 40px; color: var(--text-dim); letter-spacing: 8px; text-transform: uppercase;">INJECT INTO YOUR WALLET</h2>
+        <div style="background: rgba(255,0,0,0.02); padding: 50px; border: 3px solid var(--primary); display: inline-block; position: relative; box-shadow: 0 0 60px rgba(255,0,0,0.1);">
+            <code id="ca" style="font-family: monospace; color: #fff; font-size: 1.5rem; font-weight: 900; letter-spacing: 2px;">HeW1p4dmijt3BThfSZyhvc8utrD9djuv5tnHibhRpump</code>
+            <div style="margin-top: 30px;">
+                <button onclick="copyCA()" class="btn-main" style="padding: 20px 50px; clip-path: none; box-shadow: none; font-size: 0.9rem;">COPY ADDRESS</button>
+            </div>
+        </div>
+    </div>
+
+    <footer style="padding: 120px 80px; text-align: center; border-top: 1px solid #111; background: #000;">
+        <div style="display: flex; justify-content: center; gap: 60px; margin-bottom: 60px; font-size: 2.5rem;">
+            <a href="https://x.com/hey_magesh1" style="color: #fff; transition: 0.4s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='#fff'"><i class="fab fa-twitter"></i></a>
+            <a href="https://t.me/redrageai/1" style="color: #fff; transition: 0.4s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='#fff'"><i class="fab fa-telegram"></i></a>
+            <a href="#" style="color: #fff; transition: 0.4s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='#fff'"><i class="fas fa-skull"></i></a> 
+        </div>
+        <p style="font-size: 0.9rem; color: #333; text-transform: uppercase; letter-spacing: 8px;">&copy; 2026 RED RAGE TERMINAL. BUILT FOR THE AGGRESSIVE. NOT FOR THE WEAK.</p>
+        <p style="font-size: 0.7rem; color: #222; margin-top: 20px;">SYSTEM IDENTIFIER: 0xRAGE_TOTAL_CHAOS_ENGAGED</p>
+    </footer>
+
+    <script>
+        // Custom Cursor Logic
+        const dot = document.getElementById('cursor-dot');
+        const outline = document.getElementById('cursor-outline');
+        window.addEventListener('mousemove', (e) => {
+            dot.style.left = e.clientX + 'px';
+            dot.style.top = e.clientY + 'px';
+            outline.style.left = e.clientX - 25 + 'px';
+            outline.style.top = e.clientY - 25 + 'px';
+        });
+
+        // Matrix-style Particle Canvas (ULTRA-HD)
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let particles = [];
+
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 4 + 1;
+                this.speedX = (Math.random() - 0.5) * 6;
+                this.speedY = (Math.random() - 0.5) * 6;
+                this.life = Math.random() * 100;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.life -= 0.3;
+                if (this.life <= 0 || this.x > canvas.width || this.x < 0 || this.y > canvas.height || this.y < 0) this.reset();
+            }
+            draw() {
+                ctx.fillStyle = `rgba(255, 0, 51, ${this.life / 100})`;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = 'red';
+                ctx.fillRect(this.x, this.y, this.size, this.size);
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        for (let i = 0; i < 250; i++) particles.push(new Particle());
+
+        function animate() {
+            ctx.fillStyle = 'rgba(2, 2, 2, 0.2)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // Scroll Reveal Logic
+        window.onscroll = () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 100) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+
+            document.querySelectorAll('.reveal').forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 100) el.classList.add('active');
+            });
+        };
+
+        function copyCA() {
+            navigator.clipboard.write
+
